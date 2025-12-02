@@ -1,0 +1,4 @@
+{
+    "python.dataScience.jupyterServerURI": "local",
+    "python.pythonPath": "aoc2025/bin/python3.10"
+}
