@@ -61,4 +61,11 @@ mod advent_of_code_2025 {
         let rust_vec:Vec<String> = text.lines().map(|s| s.to_string()).collect();
         PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
     }
+    #[pyfunction]
+    fn get_csv_py(py: Python<'_>, day: i32, sample:bool, part:usize) -> Bound<'_,PyList> {
+        let text = get_text(day, sample, part).unwrap();
+        let rust_vec:Vec<String> = text.split(',').map(|s| s.trim().to_string()).collect();
+        PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
+    }
+
 }
