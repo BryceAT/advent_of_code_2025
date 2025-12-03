@@ -67,5 +67,12 @@ mod advent_of_code_2025 {
         let rust_vec:Vec<String> = text.split(',').map(|s| s.trim().to_string()).collect();
         PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
     }
+    #[pyfunction]
+    fn get_map_py(py: Python<'_>, day: i32, sample:bool, part:usize) -> Bound<'_,PyList> {
+        //return Vec<Vec<i32>> 
+        let text = get_text(day, sample, part).unwrap();
+        let rust_vec:Vec<Vec<i32>> = text.lines().map(|line| line.bytes().map(|b| (b - b'0') as i32).collect::<Vec<_>>()).collect();
+        PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
+    }
 
 }
