@@ -102,13 +102,13 @@ impl CharGrid {
         self.grid[i][j] = val;
         Ok(())
     }
-    fn count_neighbors(&self, i: usize, j: usize) -> i32 {
+    fn count_neighbors(&self, i:usize, j:usize, val:char) -> i32 {
         let mut cnt = 0;
         for (x,y) in [(i.wrapping_sub(1),j.wrapping_sub(1)),(i,j.wrapping_sub(1)),(i+1,j.wrapping_sub(1)),
                         (i.wrapping_sub(1),j),(i+1,j),
                         (i.wrapping_sub(1),j+1),(i,j+1),(i+1,j+1),] {
             if x < self.grid.len() && y < self.grid[0].len() {
-                if self.grid[x][y] == '@' {cnt += 1}
+                if self.grid[x][y] == val {cnt += 1}
             }
         }
         cnt
