@@ -74,5 +74,38 @@ mod advent_of_code_2025 {
         let rust_vec:Vec<Vec<i32>> = text.lines().map(|line| line.bytes().map(|b| (b - b'0') as i32).collect::<Vec<_>>()).collect();
         PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
     }
-
+    #[pyfunction]
+    fn get_map_char_py(py: Python<'_>, day: i32, sample:bool, part:usize) -> Bound<'_,PyList> {
+        //return Vec<Vec<i32>> 
+        let text = get_text(day, sample, part).unwrap();
+        let rust_vec:Vec<Vec<char>> = text.lines().map(|line| line.chars().collect::<Vec<_>>()).collect();
+        PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
+    }
+    #[pymodule_export]
+    use super::CharGrid;
 }
+
+#[pyclass]
+struct CharGrid {
+    grid: Vec<Vec<char>>,
+}
+#[pymethods]
+impl CharGrid {
+    #[new]
+    fn new(grid:Vec<Vec<char>>) -> Self {
+        CharGrid{grid}
+    }
+    
+    fn count_neighbors(&self, i: usize, j: usize) -> i32 {
+        let mut cnt = 0;
+        for (x,y) in [(i.wrapping_sub(1),j.wrapping_sub(1)),(i,j.wrapping_sub(1)),(i+1,j.wrapping_sub(1)),
+                        (i.wrapping_sub(1),j),(i+1,j),
+                        (i.wrapping_sub(1),j+1),(i,j+1),(i+1,j+1),] {
+            if x < self.grid.len() && y < self.grid[0].len() {
+                if self.grid[x][y] == '@' {cnt += 1}
+            }
+        }
+        cnt
+    }
+}
+
