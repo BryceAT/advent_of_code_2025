@@ -95,7 +95,13 @@ impl CharGrid {
     fn new(grid:Vec<Vec<char>>) -> Self {
         CharGrid{grid}
     }
-    
+    fn get(&self,i: usize, j: usize) -> PyResult<char> {
+        Ok(self.grid[i][j])
+    }
+    fn set(&mut self, i:usize, j:usize, val:char) -> PyResult<()> {
+        self.grid[i][j] = val;
+        Ok(())
+    }
     fn count_neighbors(&self, i: usize, j: usize) -> i32 {
         let mut cnt = 0;
         for (x,y) in [(i.wrapping_sub(1),j.wrapping_sub(1)),(i,j.wrapping_sub(1)),(i+1,j.wrapping_sub(1)),
