@@ -68,6 +68,12 @@ mod advent_of_code_2025 {
         PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
     }
     #[pyfunction]
+    fn get_csv_muliline_py(py: Python<'_>, day: i32, sample:bool, part:usize) -> Bound<'_,PyList> {
+        let text = get_text(day, sample, part).unwrap();
+        let rust_vec:Vec<Vec<i32>> = text.lines().map(|s| s.trim().split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<_>>()).collect();
+        PyList::new(py, &rust_vec).expect("could not make python list from rust vec")
+    }
+    #[pyfunction]
     fn get_map_py(py: Python<'_>, day: i32, sample:bool, part:usize) -> Bound<'_,PyList> {
         //return Vec<Vec<i32>> 
         let text = get_text(day, sample, part).unwrap();
