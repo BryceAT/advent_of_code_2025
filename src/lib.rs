@@ -89,6 +89,8 @@ mod advent_of_code_2025 {
     }
     #[pymodule_export]
     use super::CharGrid;
+    #[pymodule_export]
+    use super::UnionFind;
 }
 
 #[pyclass]
@@ -118,6 +120,47 @@ impl CharGrid {
             }
         }
         cnt
+    }
+}
+#[pyclass]
+struct UnionFind {
+    parents: Vec<usize>,
+    sizes: Vec<usize>,
+    last_union:(usize,usize),
+    max_size: usize,
+}
+#[pymethods]
+impl UnionFind {
+    #[new]
+    fn new(n:usize) -> Self {
+        //assume n >= 1
+        UnionFind{parents: (0..n).collect(), sizes:vec![1;n],last_union:(0,0),max_size:1}
+    }
+    fn find(&mut self, x: usize) -> usize {
+        if x != self.parents[x] {
+            self.parents[x] = self.find(self.parents[x]);
+        }
+        self.parents[x]
+    }
+    fn union(&mut self, x: usize, y: usize) {
+        let _x = self.find(x);
+        let _y = self.find(y);
+        if _x != _y {
+            self.last_union = (x,y);
+            self.sizes[_y] += self.sizes[_x];
+            self.max_size = self.max_size.max(self.sizes[_y]);
+            self.sizes[_x] = 0;
+            self.parents[_x] = _y;
+        }
+    }
+    fn get_sizes(&self) -> Vec<usize> {
+        self.sizes.clone()
+    }
+    fn get_max_size(&self) -> usize {
+        self.max_size
+    }
+    fn get_last_union(&self) -> (usize,usize) {
+        self.last_union.clone()
     }
 }
 
